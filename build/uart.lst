@@ -1,0 +1,394 @@
+   1              		.arch armv7-a
+   2              		.eabi_attribute 27, 3
+   3              		.eabi_attribute 28, 1
+   4              		.fpu neon-vfpv4
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 6
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.file	"uart.c"
+  15              		.data
+  16              		.align	2
+  19              	gpio:
+  20 0000 0000203F 		.word	1059061760
+  21              		.align	2
+  24              	uart:
+  25 0004 0010203F 		.word	1059065856
+  26              		.text
+  27              		.align	2
+  28              		.global	wait_for_tx_slot
+  30              	wait_for_tx_slot:
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 1, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+  34 0000 04B02DE5 		str	fp, [sp, #-4]!
+  35 0004 00B08DE2 		add	fp, sp, #0
+  36 0008 0000A0E1 		mov	r0, r0	@ nop
+  37              	.L2:
+  38 000c 003000E3 		movw	r3, #:lower16:uart
+  39 0010 003040E3 		movt	r3, #:upper16:uart
+  40 0014 003093E5 		ldr	r3, [r3, #0]
+  41 0018 183083E2 		add	r3, r3, #24
+  42 001c 003093E5 		ldr	r3, [r3, #0]
+  43 0020 203003E2 		and	r3, r3, #32
+  44 0024 000053E3 		cmp	r3, #0
+  45 0028 F7FFFF1A 		bne	.L2
+  46 002c 00D08BE2 		add	sp, fp, #0
+  47 0030 0008BDE8 		ldmfd	sp!, {fp}
+  48 0034 1EFF2FE1 		bx	lr
+  50              		.align	2
+  51              		.global	wait_for_uart_idle
+  53              	wait_for_uart_idle:
+  54              		@ args = 0, pretend = 0, frame = 0
+  55              		@ frame_needed = 1, uses_anonymous_args = 0
+  56              		@ link register save eliminated.
+  57 0038 04B02DE5 		str	fp, [sp, #-4]!
+  58 003c 00B08DE2 		add	fp, sp, #0
+  59 0040 0000A0E1 		mov	r0, r0	@ nop
+  60              	.L4:
+  61 0044 003000E3 		movw	r3, #:lower16:uart
+  62 0048 003040E3 		movt	r3, #:upper16:uart
+  63 004c 003093E5 		ldr	r3, [r3, #0]
+  64 0050 183083E2 		add	r3, r3, #24
+  65 0054 003093E5 		ldr	r3, [r3, #0]
+  66 0058 083003E2 		and	r3, r3, #8
+  67 005c 000053E3 		cmp	r3, #0
+  68 0060 F7FFFF1A 		bne	.L4
+  69 0064 00D08BE2 		add	sp, fp, #0
+  70 0068 0008BDE8 		ldmfd	sp!, {fp}
+  71 006c 1EFF2FE1 		bx	lr
+  73              		.align	2
+  74              		.global	wait_for_rx_slot
+  76              	wait_for_rx_slot:
+  77              		@ args = 0, pretend = 0, frame = 0
+  78              		@ frame_needed = 1, uses_anonymous_args = 0
+  79              		@ link register save eliminated.
+  80 0070 04B02DE5 		str	fp, [sp, #-4]!
+  81 0074 00B08DE2 		add	fp, sp, #0
+  82 0078 0000A0E1 		mov	r0, r0	@ nop
+  83              	.L6:
+  84 007c 003000E3 		movw	r3, #:lower16:uart
+  85 0080 003040E3 		movt	r3, #:upper16:uart
+  86 0084 003093E5 		ldr	r3, [r3, #0]
+  87 0088 183083E2 		add	r3, r3, #24
+  88 008c 003093E5 		ldr	r3, [r3, #0]
+  89 0090 403003E2 		and	r3, r3, #64
+  90 0094 000053E3 		cmp	r3, #0
+  91 0098 F7FFFF1A 		bne	.L6
+  92 009c 00D08BE2 		add	sp, fp, #0
+  93 00a0 0008BDE8 		ldmfd	sp!, {fp}
+  94 00a4 1EFF2FE1 		bx	lr
+  96              		.align	2
+  97              		.global	wait_for_rx_has_char
+  99              	wait_for_rx_has_char:
+ 100              		@ args = 0, pretend = 0, frame = 0
+ 101              		@ frame_needed = 1, uses_anonymous_args = 0
+ 102              		@ link register save eliminated.
+ 103 00a8 04B02DE5 		str	fp, [sp, #-4]!
+ 104 00ac 00B08DE2 		add	fp, sp, #0
+ 105 00b0 0000A0E1 		mov	r0, r0	@ nop
+ 106              	.L8:
+ 107 00b4 003000E3 		movw	r3, #:lower16:uart
+ 108 00b8 003040E3 		movt	r3, #:upper16:uart
+ 109 00bc 003093E5 		ldr	r3, [r3, #0]
+ 110 00c0 183083E2 		add	r3, r3, #24
+ 111 00c4 003093E5 		ldr	r3, [r3, #0]
+ 112 00c8 103003E2 		and	r3, r3, #16
+ 113 00cc 000053E3 		cmp	r3, #0
+ 114 00d0 F7FFFF1A 		bne	.L8
+ 115 00d4 00D08BE2 		add	sp, fp, #0
+ 116 00d8 0008BDE8 		ldmfd	sp!, {fp}
+ 117 00dc 1EFF2FE1 		bx	lr
+ 119              		.align	2
+ 120              		.global	delay
+ 122              	delay:
+ 123              		@ args = 0, pretend = 0, frame = 8
+ 124              		@ frame_needed = 1, uses_anonymous_args = 0
+ 125              		@ link register save eliminated.
+ 126 00e0 04B02DE5 		str	fp, [sp, #-4]!
+ 127 00e4 00B08DE2 		add	fp, sp, #0
+ 128 00e8 0CD04DE2 		sub	sp, sp, #12
+ 129 00ec 08000BE5 		str	r0, [fp, #-8]
+ 130 00f0 020000EA 		b	.L10
+ 131              	.L11:
+ 132 00f4 08301BE5 		ldr	r3, [fp, #-8]
+ 133 00f8 013043E2 		sub	r3, r3, #1
+ 134 00fc 08300BE5 		str	r3, [fp, #-8]
+ 135              	.L10:
+ 136 0100 08301BE5 		ldr	r3, [fp, #-8]
+ 137 0104 000053E3 		cmp	r3, #0
+ 138 0108 F9FFFF1A 		bne	.L11
+ 139 010c 00D08BE2 		add	sp, fp, #0
+ 140 0110 0008BDE8 		ldmfd	sp!, {fp}
+ 141 0114 1EFF2FE1 		bx	lr
+ 143              		.align	2
+ 144              		.global	init_uart
+ 146              	init_uart:
+ 147              		@ args = 0, pretend = 0, frame = 0
+ 148              		@ frame_needed = 1, uses_anonymous_args = 0
+ 149 0118 00482DE9 		stmfd	sp!, {fp, lr}
+ 150 011c 04B08DE2 		add	fp, sp, #4
+ 151 0120 003000E3 		movw	r3, #:lower16:gpio
+ 152 0124 003040E3 		movt	r3, #:upper16:gpio
+ 153 0128 003093E5 		ldr	r3, [r3, #0]
+ 154 012c 042083E2 		add	r2, r3, #4
+ 155 0130 003000E3 		movw	r3, #:lower16:gpio
+ 156 0134 003040E3 		movt	r3, #:upper16:gpio
+ 157 0138 003093E5 		ldr	r3, [r3, #0]
+ 158 013c 043083E2 		add	r3, r3, #4
+ 159 0140 003093E5 		ldr	r3, [r3, #0]
+ 160 0144 093983E3 		orr	r3, r3, #147456
+ 161 0148 003082E5 		str	r3, [r2, #0]
+ 162 014c 003000E3 		movw	r3, #:lower16:uart
+ 163 0150 003040E3 		movt	r3, #:upper16:uart
+ 164 0154 003093E5 		ldr	r3, [r3, #0]
+ 165 0158 303083E2 		add	r3, r3, #48
+ 166 015c 0020A0E3 		mov	r2, #0
+ 167 0160 002083E5 		str	r2, [r3, #0]
+ 168 0164 FEFFFFEB 		bl	wait_for_uart_idle
+ 169 0168 003000E3 		movw	r3, #:lower16:uart
+ 170 016c 003040E3 		movt	r3, #:upper16:uart
+ 171 0170 003093E5 		ldr	r3, [r3, #0]
+ 172 0174 2C2083E2 		add	r2, r3, #44
+ 173 0178 003000E3 		movw	r3, #:lower16:uart
+ 174 017c 003040E3 		movt	r3, #:upper16:uart
+ 175 0180 003093E5 		ldr	r3, [r3, #0]
+ 176 0184 2C3083E2 		add	r3, r3, #44
+ 177 0188 003093E5 		ldr	r3, [r3, #0]
+ 178 018c 003082E5 		str	r3, [r2, #0]
+ 179 0190 003000E3 		movw	r3, #:lower16:gpio
+ 180 0194 003040E3 		movt	r3, #:upper16:gpio
+ 181 0198 003093E5 		ldr	r3, [r3, #0]
+ 182 019c 943083E2 		add	r3, r3, #148
+ 183 01a0 0020A0E3 		mov	r2, #0
+ 184 01a4 002083E5 		str	r2, [r3, #0]
+ 185 01a8 9600A0E3 		mov	r0, #150
+ 186 01ac FEFFFFEB 		bl	delay
+ 187 01b0 003000E3 		movw	r3, #:lower16:gpio
+ 188 01b4 003040E3 		movt	r3, #:upper16:gpio
+ 189 01b8 003093E5 		ldr	r3, [r3, #0]
+ 190 01bc 983083E2 		add	r3, r3, #152
+ 191 01c0 0329A0E3 		mov	r2, #49152
+ 192 01c4 002083E5 		str	r2, [r3, #0]
+ 193 01c8 9600A0E3 		mov	r0, #150
+ 194 01cc FEFFFFEB 		bl	delay
+ 195 01d0 003000E3 		movw	r3, #:lower16:gpio
+ 196 01d4 003040E3 		movt	r3, #:upper16:gpio
+ 197 01d8 003093E5 		ldr	r3, [r3, #0]
+ 198 01dc 983083E2 		add	r3, r3, #152
+ 199 01e0 0020A0E3 		mov	r2, #0
+ 200 01e4 002083E5 		str	r2, [r3, #0]
+ 201 01e8 003000E3 		movw	r3, #:lower16:uart
+ 202 01ec 003040E3 		movt	r3, #:upper16:uart
+ 203 01f0 003093E5 		ldr	r3, [r3, #0]
+ 204 01f4 443083E2 		add	r3, r3, #68
+ 205 01f8 FF2700E3 		movw	r2, #2047
+ 206 01fc 002083E5 		str	r2, [r3, #0]
+ 207 0200 003000E3 		movw	r3, #:lower16:uart
+ 208 0204 003040E3 		movt	r3, #:upper16:uart
+ 209 0208 003093E5 		ldr	r3, [r3, #0]
+ 210 020c 243083E2 		add	r3, r3, #36
+ 211 0210 1A20A0E3 		mov	r2, #26
+ 212 0214 002083E5 		str	r2, [r3, #0]
+ 213 0218 003000E3 		movw	r3, #:lower16:uart
+ 214 021c 003040E3 		movt	r3, #:upper16:uart
+ 215 0220 003093E5 		ldr	r3, [r3, #0]
+ 216 0224 283083E2 		add	r3, r3, #40
+ 217 0228 0120A0E3 		mov	r2, #1
+ 218 022c 002083E5 		str	r2, [r3, #0]
+ 219 0230 003000E3 		movw	r3, #:lower16:uart
+ 220 0234 003040E3 		movt	r3, #:upper16:uart
+ 221 0238 003093E5 		ldr	r3, [r3, #0]
+ 222 023c 2C2083E2 		add	r2, r3, #44
+ 223 0240 003000E3 		movw	r3, #:lower16:uart
+ 224 0244 003040E3 		movt	r3, #:upper16:uart
+ 225 0248 003093E5 		ldr	r3, [r3, #0]
+ 226 024c 2C3083E2 		add	r3, r3, #44
+ 227 0250 003093E5 		ldr	r3, [r3, #0]
+ 228 0254 703083E3 		orr	r3, r3, #112
+ 229 0258 003082E5 		str	r3, [r2, #0]
+ 230 025c 003000E3 		movw	r3, #:lower16:uart
+ 231 0260 003040E3 		movt	r3, #:upper16:uart
+ 232 0264 003093E5 		ldr	r3, [r3, #0]
+ 233 0268 382083E2 		add	r2, r3, #56
+ 234 026c 003000E3 		movw	r3, #:lower16:uart
+ 235 0270 003040E3 		movt	r3, #:upper16:uart
+ 236 0274 003093E5 		ldr	r3, [r3, #0]
+ 237 0278 383083E2 		add	r3, r3, #56
+ 238 027c 003093E5 		ldr	r3, [r3, #0]
+ 239 0280 7F3E83E3 		orr	r3, r3, #2032
+ 240 0284 023083E3 		orr	r3, r3, #2
+ 241 0288 003082E5 		str	r3, [r2, #0]
+ 242 028c 003000E3 		movw	r3, #:lower16:uart
+ 243 0290 003040E3 		movt	r3, #:upper16:uart
+ 244 0294 003093E5 		ldr	r3, [r3, #0]
+ 245 0298 302083E2 		add	r2, r3, #48
+ 246 029c 003000E3 		movw	r3, #:lower16:uart
+ 247 02a0 003040E3 		movt	r3, #:upper16:uart
+ 248 02a4 003093E5 		ldr	r3, [r3, #0]
+ 249 02a8 303083E2 		add	r3, r3, #48
+ 250 02ac 003093E5 		ldr	r3, [r3, #0]
+ 251 02b0 033C83E3 		orr	r3, r3, #768
+ 252 02b4 013083E3 		orr	r3, r3, #1
+ 253 02b8 003082E5 		str	r3, [r2, #0]
+ 254 02bc 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 256              		.align	2
+ 257              		.global	get_char
+ 259              	get_char:
+ 260              		@ args = 0, pretend = 0, frame = 0
+ 261              		@ frame_needed = 1, uses_anonymous_args = 0
+ 262 02c0 00482DE9 		stmfd	sp!, {fp, lr}
+ 263 02c4 04B08DE2 		add	fp, sp, #4
+ 264 02c8 FEFFFFEB 		bl	wait_for_rx_has_char
+ 265 02cc 9600A0E3 		mov	r0, #150
+ 266 02d0 FEFFFFEB 		bl	delay
+ 267 02d4 003000E3 		movw	r3, #:lower16:uart
+ 268 02d8 003040E3 		movt	r3, #:upper16:uart
+ 269 02dc 003093E5 		ldr	r3, [r3, #0]
+ 270 02e0 003093E5 		ldr	r3, [r3, #0]
+ 271 02e4 7330EFE6 		uxtb	r3, r3
+ 272 02e8 0300A0E1 		mov	r0, r3
+ 273 02ec 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 275              		.align	2
+ 276              		.global	put_char
+ 278              	put_char:
+ 279              		@ args = 0, pretend = 0, frame = 8
+ 280              		@ frame_needed = 1, uses_anonymous_args = 0
+ 281 02f0 00482DE9 		stmfd	sp!, {fp, lr}
+ 282 02f4 04B08DE2 		add	fp, sp, #4
+ 283 02f8 08D04DE2 		sub	sp, sp, #8
+ 284 02fc 0030A0E1 		mov	r3, r0
+ 285 0300 05304BE5 		strb	r3, [fp, #-5]
+ 286 0304 FEFFFFEB 		bl	wait_for_tx_slot
+ 287 0308 9600A0E3 		mov	r0, #150
+ 288 030c FEFFFFEB 		bl	delay
+ 289 0310 003000E3 		movw	r3, #:lower16:uart
+ 290 0314 003040E3 		movt	r3, #:upper16:uart
+ 291 0318 003093E5 		ldr	r3, [r3, #0]
+ 292 031c 05205BE5 		ldrb	r2, [fp, #-5]	@ zero_extendqisi2
+ 293 0320 002083E5 		str	r2, [r3, #0]
+ 294 0324 04D04BE2 		sub	sp, fp, #4
+ 295 0328 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 297              		.section	.rodata
+ 298              		.align	2
+ 299              	.LC0:
+ 300 0000 0D0A00   		.ascii	"\015\012\000"
+ 301 0003 00       		.text
+ 302              		.align	2
+ 303              		.global	get_string
+ 305              	get_string:
+ 306              		@ args = 0, pretend = 0, frame = 16
+ 307              		@ frame_needed = 1, uses_anonymous_args = 0
+ 308 032c 00482DE9 		stmfd	sp!, {fp, lr}
+ 309 0330 04B08DE2 		add	fp, sp, #4
+ 310 0334 10D04DE2 		sub	sp, sp, #16
+ 311 0338 10000BE5 		str	r0, [fp, #-16]
+ 312 033c 14100BE5 		str	r1, [fp, #-20]
+ 313 0340 0030A0E3 		mov	r3, #0
+ 314 0344 08300BE5 		str	r3, [fp, #-8]
+ 315 0348 0030A0E3 		mov	r3, #0
+ 316 034c 09304BE5 		strb	r3, [fp, #-9]
+ 317 0350 210000EA 		b	.L17
+ 318              	.L21:
+ 319 0354 FEFFFFEB 		bl	get_char
+ 320 0358 0030A0E1 		mov	r3, r0
+ 321 035c 09304BE5 		strb	r3, [fp, #-9]
+ 322 0360 09305BE5 		ldrb	r3, [fp, #-9]	@ zero_extendqisi2
+ 323 0364 0A0053E3 		cmp	r3, #10
+ 324 0368 0E00000A 		beq	.L18
+ 325 036c 09305BE5 		ldrb	r3, [fp, #-9]	@ zero_extendqisi2
+ 326 0370 0D0053E3 		cmp	r3, #13
+ 327 0374 0B00000A 		beq	.L18
+ 328 0378 09305BE5 		ldrb	r3, [fp, #-9]	@ zero_extendqisi2
+ 329 037c 0300A0E1 		mov	r0, r3
+ 330 0380 FEFFFFEB 		bl	put_char
+ 331 0384 10201BE5 		ldr	r2, [fp, #-16]
+ 332 0388 08301BE5 		ldr	r3, [fp, #-8]
+ 333 038c 033082E0 		add	r3, r2, r3
+ 334 0390 09205BE5 		ldrb	r2, [fp, #-9]
+ 335 0394 0020C3E5 		strb	r2, [r3, #0]
+ 336 0398 08301BE5 		ldr	r3, [fp, #-8]
+ 337 039c 013083E2 		add	r3, r3, #1
+ 338 03a0 08300BE5 		str	r3, [fp, #-8]
+ 339 03a4 0C0000EA 		b	.L17
+ 340              	.L18:
+ 341 03a8 09305BE5 		ldrb	r3, [fp, #-9]	@ zero_extendqisi2
+ 342 03ac 0D0053E3 		cmp	r3, #13
+ 343 03b0 0300001A 		bne	.L19
+ 344 03b4 000000E3 		movw	r0, #:lower16:.LC0
+ 345 03b8 000040E3 		movt	r0, #:upper16:.LC0
+ 346 03bc FEFFFFEB 		bl	put_string
+ 347 03c0 050000EA 		b	.L17
+ 348              	.L19:
+ 349 03c4 09305BE5 		ldrb	r3, [fp, #-9]	@ zero_extendqisi2
+ 350 03c8 0A0053E3 		cmp	r3, #10
+ 351 03cc 0200001A 		bne	.L17
+ 352 03d0 000000E3 		movw	r0, #:lower16:.LC0
+ 353 03d4 000040E3 		movt	r0, #:upper16:.LC0
+ 354 03d8 FEFFFFEB 		bl	put_string
+ 355              	.L17:
+ 356 03dc 14301BE5 		ldr	r3, [fp, #-20]
+ 357 03e0 012043E2 		sub	r2, r3, #1
+ 358 03e4 08301BE5 		ldr	r3, [fp, #-8]
+ 359 03e8 030052E1 		cmp	r2, r3
+ 360 03ec 0500009A 		bls	.L20
+ 361 03f0 09305BE5 		ldrb	r3, [fp, #-9]	@ zero_extendqisi2
+ 362 03f4 0A0053E3 		cmp	r3, #10
+ 363 03f8 0200000A 		beq	.L20
+ 364 03fc 09305BE5 		ldrb	r3, [fp, #-9]	@ zero_extendqisi2
+ 365 0400 0D0053E3 		cmp	r3, #13
+ 366 0404 D2FFFF1A 		bne	.L21
+ 367              	.L20:
+ 368 0408 10201BE5 		ldr	r2, [fp, #-16]
+ 369 040c 08301BE5 		ldr	r3, [fp, #-8]
+ 370 0410 033082E0 		add	r3, r2, r3
+ 371 0414 0020A0E3 		mov	r2, #0
+ 372 0418 0020C3E5 		strb	r2, [r3, #0]
+ 373 041c 08301BE5 		ldr	r3, [fp, #-8]
+ 374 0420 0300A0E1 		mov	r0, r3
+ 375 0424 04D04BE2 		sub	sp, fp, #4
+ 376 0428 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 378              		.align	2
+ 379              		.global	put_string
+ 381              	put_string:
+ 382              		@ args = 0, pretend = 0, frame = 16
+ 383              		@ frame_needed = 1, uses_anonymous_args = 0
+ 384 042c 00482DE9 		stmfd	sp!, {fp, lr}
+ 385 0430 04B08DE2 		add	fp, sp, #4
+ 386 0434 10D04DE2 		sub	sp, sp, #16
+ 387 0438 10000BE5 		str	r0, [fp, #-16]
+ 388 043c 10301BE5 		ldr	r3, [fp, #-16]
+ 389 0440 0030D3E5 		ldrb	r3, [r3, #0]
+ 390 0444 05304BE5 		strb	r3, [fp, #-5]
+ 391 0448 0030A0E3 		mov	r3, #0
+ 392 044c 0C300BE5 		str	r3, [fp, #-12]
+ 393 0450 0D0000EA 		b	.L24
+ 394              	.L26:
+ 395 0454 10201BE5 		ldr	r2, [fp, #-16]
+ 396 0458 0C301BE5 		ldr	r3, [fp, #-12]
+ 397 045c 033082E0 		add	r3, r2, r3
+ 398 0460 0030D3E5 		ldrb	r3, [r3, #0]
+ 399 0464 05304BE5 		strb	r3, [fp, #-5]
+ 400 0468 05305BE5 		ldrb	r3, [fp, #-5]	@ zero_extendqisi2
+ 401 046c 000053E3 		cmp	r3, #0
+ 402 0470 0200000A 		beq	.L25
+ 403 0474 05305BE5 		ldrb	r3, [fp, #-5]	@ zero_extendqisi2
+ 404 0478 0300A0E1 		mov	r0, r3
+ 405 047c FEFFFFEB 		bl	put_char
+ 406              	.L25:
+ 407 0480 0C301BE5 		ldr	r3, [fp, #-12]
+ 408 0484 013083E2 		add	r3, r3, #1
+ 409 0488 0C300BE5 		str	r3, [fp, #-12]
+ 410              	.L24:
+ 411 048c 05305BE5 		ldrb	r3, [fp, #-5]	@ zero_extendqisi2
+ 412 0490 000053E3 		cmp	r3, #0
+ 413 0494 EEFFFF1A 		bne	.L26
+ 414 0498 FEFFFFEB 		bl	wait_for_uart_idle
+ 415 049c 04D04BE2 		sub	sp, fp, #4
+ 416 04a0 0088BDE8 		ldmfd	sp!, {fp, pc}
+ 418              		.ident	"GCC: (GNU) 4.7.2"

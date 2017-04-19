@@ -1,0 +1,173 @@
+   1              		.arch armv7-a
+   2              		.eabi_attribute 27, 3
+   3              		.eabi_attribute 28, 1
+   4              		.fpu neon-vfpv4
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 6
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.file	"gpio.c"
+  15              		.data
+  16              		.align	2
+  19              	gpio:
+  20 0000 0000203F 		.word	1059061760
+  21              		.global	pin_to_gpio_array
+  22              		.align	2
+  25              	pin_to_gpio_array:
+  26 0004 FF       		.byte	-1
+  27 0005 FF       		.byte	-1
+  28 0006 02       		.byte	2
+  29 0007 FF       		.byte	-1
+  30 0008 03       		.byte	3
+  31 0009 FF       		.byte	-1
+  32 000a 04       		.byte	4
+  33 000b 0E       		.byte	14
+  34 000c FF       		.byte	-1
+  35 000d 0F       		.byte	15
+  36 000e 11       		.byte	17
+  37 000f 12       		.byte	18
+  38 0010 1B       		.byte	27
+  39 0011 FF       		.byte	-1
+  40 0012 16       		.byte	22
+  41 0013 17       		.byte	23
+  42 0014 FF       		.byte	-1
+  43 0015 18       		.byte	24
+  44 0016 0A       		.byte	10
+  45 0017 FF       		.byte	-1
+  46 0018 09       		.byte	9
+  47 0019 19       		.byte	25
+  48 001a 0B       		.byte	11
+  49 001b 08       		.byte	8
+  50 001c FF       		.byte	-1
+  51 001d 07       		.byte	7
+  52 001e FF       		.byte	-1
+  53 001f FF       		.byte	-1
+  54 0020 05       		.byte	5
+  55 0021 FF       		.byte	-1
+  56 0022 06       		.byte	6
+  57 0023 0C       		.byte	12
+  58 0024 0D       		.byte	13
+  59 0025 FF       		.byte	-1
+  60 0026 13       		.byte	19
+  61 0027 10       		.byte	16
+  62 0028 1A       		.byte	26
+  63 0029 14       		.byte	20
+  64 002a FF       		.byte	-1
+  65 002b 15       		.byte	21
+  66              		.global	gpio_to_pin_array
+  67              		.align	2
+  70              	gpio_to_pin_array:
+  71 002c FF       		.byte	-1
+  72 002d FF       		.byte	-1
+  73 002e 03       		.byte	3
+  74 002f 05       		.byte	5
+  75 0030 07       		.byte	7
+  76 0031 1D       		.byte	29
+  77 0032 1F       		.byte	31
+  78 0033 1A       		.byte	26
+  79 0034 18       		.byte	24
+  80 0035 15       		.byte	21
+  81 0036 13       		.byte	19
+  82 0037 17       		.byte	23
+  83 0038 20       		.byte	32
+  84 0039 21       		.byte	33
+  85 003a 08       		.byte	8
+  86 003b 0A       		.byte	10
+  87 003c 24       		.byte	36
+  88 003d 0B       		.byte	11
+  89 003e 0C       		.byte	12
+  90 003f 23       		.byte	35
+  91 0040 26       		.byte	38
+  92 0041 28       		.byte	40
+  93 0042 0F       		.byte	15
+  94 0043 10       		.byte	16
+  95 0044 12       		.byte	18
+  96 0045 16       		.byte	22
+  97 0046 25       		.byte	37
+  98 0047 0D       		.byte	13
+  99              		.text
+ 100              		.align	2
+ 101              		.global	convert_pin_to_gpio
+ 103              	convert_pin_to_gpio:
+ 104              		@ args = 0, pretend = 0, frame = 8
+ 105              		@ frame_needed = 1, uses_anonymous_args = 0
+ 106              		@ link register save eliminated.
+ 107 0000 04B02DE5 		str	fp, [sp, #-4]!
+ 108 0004 00B08DE2 		add	fp, sp, #0
+ 109 0008 0CD04DE2 		sub	sp, sp, #12
+ 110 000c 0030A0E1 		mov	r3, r0
+ 111 0010 05304BE5 		strb	r3, [fp, #-5]
+ 112 0014 D5305BE1 		ldrsb	r3, [fp, #-5]
+ 113 0018 000053E3 		cmp	r3, #0
+ 114 001c 020000BA 		blt	.L2
+ 115 0020 D5305BE1 		ldrsb	r3, [fp, #-5]
+ 116 0024 280053E3 		cmp	r3, #40
+ 117 0028 010000DA 		ble	.L3
+ 118              	.L2:
+ 119 002c FF30A0E3 		mov	r3, #255
+ 120 0030 030000EA 		b	.L4
+ 121              	.L3:
+ 122 0034 D5205BE1 		ldrsb	r2, [fp, #-5]
+ 123 0038 003000E3 		movw	r3, #:lower16:pin_to_gpio_array
+ 124 003c 003040E3 		movt	r3, #:upper16:pin_to_gpio_array
+ 125 0040 0230D3E7 		ldrb	r3, [r3, r2]	@ zero_extendqisi2
+ 126              	.L4:
+ 127 0044 7330AFE6 		sxtb	r3, r3
+ 128 0048 0300A0E1 		mov	r0, r3
+ 129 004c 00D08BE2 		add	sp, fp, #0
+ 130 0050 0008BDE8 		ldmfd	sp!, {fp}
+ 131 0054 1EFF2FE1 		bx	lr
+ 133              		.align	2
+ 134              		.global	convert_gpio_to_pin
+ 136              	convert_gpio_to_pin:
+ 137              		@ args = 0, pretend = 0, frame = 8
+ 138              		@ frame_needed = 1, uses_anonymous_args = 0
+ 139              		@ link register save eliminated.
+ 140 0058 04B02DE5 		str	fp, [sp, #-4]!
+ 141 005c 00B08DE2 		add	fp, sp, #0
+ 142 0060 0CD04DE2 		sub	sp, sp, #12
+ 143 0064 0030A0E1 		mov	r3, r0
+ 144 0068 05304BE5 		strb	r3, [fp, #-5]
+ 145 006c D5305BE1 		ldrsb	r3, [fp, #-5]
+ 146 0070 000053E3 		cmp	r3, #0
+ 147 0074 020000BA 		blt	.L6
+ 148 0078 D5305BE1 		ldrsb	r3, [fp, #-5]
+ 149 007c 1C0053E3 		cmp	r3, #28
+ 150 0080 010000DA 		ble	.L7
+ 151              	.L6:
+ 152 0084 FF30A0E3 		mov	r3, #255
+ 153 0088 030000EA 		b	.L8
+ 154              	.L7:
+ 155 008c D5205BE1 		ldrsb	r2, [fp, #-5]
+ 156 0090 003000E3 		movw	r3, #:lower16:gpio_to_pin_array
+ 157 0094 003040E3 		movt	r3, #:upper16:gpio_to_pin_array
+ 158 0098 0230D3E7 		ldrb	r3, [r3, r2]	@ zero_extendqisi2
+ 159              	.L8:
+ 160 009c 7330AFE6 		sxtb	r3, r3
+ 161 00a0 0300A0E1 		mov	r0, r3
+ 162 00a4 00D08BE2 		add	sp, fp, #0
+ 163 00a8 0008BDE8 		ldmfd	sp!, {fp}
+ 164 00ac 1EFF2FE1 		bx	lr
+ 166              		.align	2
+ 167              		.global	mmio_write
+ 169              	mmio_write:
+ 170              		@ args = 0, pretend = 0, frame = 8
+ 171              		@ frame_needed = 1, uses_anonymous_args = 0
+ 172              		@ link register save eliminated.
+ 173 00b0 04B02DE5 		str	fp, [sp, #-4]!
+ 174 00b4 00B08DE2 		add	fp, sp, #0
+ 175 00b8 0CD04DE2 		sub	sp, sp, #12
+ 176 00bc 08000BE5 		str	r0, [fp, #-8]
+ 177 00c0 0C100BE5 		str	r1, [fp, #-12]
+ 178 00c4 08301BE5 		ldr	r3, [fp, #-8]
+ 179 00c8 0C201BE5 		ldr	r2, [fp, #-12]
+ 180 00cc 002083E5 		str	r2, [r3, #0]
+ 181 00d0 00D08BE2 		add	sp, fp, #0
+ 182 00d4 0008BDE8 		ldmfd	sp!, {fp}
+ 183 00d8 1EFF2FE1 		bx	lr
+ 185              		.ident	"GCC: (GNU) 4.7.2"
