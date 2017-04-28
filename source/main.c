@@ -42,9 +42,14 @@ uint32_t mod(uint32_t dividend, uint32_t divisor) {
 }
 
 
-//Generates a random integer with a minimum value of min and a maximum value of max. 
+//Generates a random integer with a minimum value of min and a maximum value of max.
 //Range is inclusive
 uint32_t random(uint32_t min, uint32_t max) {
+    max = max + 1;
+    uint32_t counter = min;
+    min = min * 100;
+    max = max * 100;
+
     state = state xor (state << 13);
     state = state xor (state >> 17);
     state = state xor (state << 5);
@@ -55,7 +60,14 @@ uint32_t random(uint32_t min, uint32_t max) {
         tmp = mod(tmp, max);
     }
 
-    return tmp;
+    for (uint32_t i = min; i < max; i += 100) {
+        if (tmp < i + 100) {
+            return counter;
+        }
+        counter++;
+    }
+
+    return counter;
 }
 
 
