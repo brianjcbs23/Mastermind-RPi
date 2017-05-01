@@ -54,9 +54,9 @@ uint32_t random(uint32_t min, uint32_t max) {
     min = min * 100;
     max = max * 100;
 
-    state = state xor (state << 13);
-    state = state xor (state >> 17);
-    state = state xor (state << 5);
+    state = state ^ (state << 13);
+    state = state ^ (state >> 17);
+    state = state ^ (state << 5);
 
     uint32_t tmp = mod(state, max);
     while (tmp < min) {
