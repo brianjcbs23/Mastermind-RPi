@@ -27,6 +27,10 @@ void blink_code(uint32_t err)
     timer_delay_ms(4500);
 }
 
+void LEDFlash(int correct, int wrongLocation) {
+
+}
+
 
 //Current state of the random
 uint32_t state = 100;
@@ -73,47 +77,71 @@ uint32_t random(uint32_t min, uint32_t max) {
 
 int main()
 {
-    init_uart();
-    gpio[GPFSEL1] |= (1 << 27);
-    gpio[GPFSEL2] |= (1 << 12);
+    //init_uart();
+    //gpio[GPFSEL1] |= (1 << 27);
+    //gpio[GPFSEL2] |= (1 << 12);
 
-    while(1){
-        // generate the mastermind codeword
-        // char [4] codeword;
-        char codeword[4] = {0,0,0,0};
-        char options[6] = {'1','2','3','4','5','6'};
 
-        //Loop through and generate random codeword
-        while (codeword[0] == 0 || codeword[1] == 0 || codeword[2] == 0 || codeword[3] == 0) {
-            char newLetter = options[random(0, 5)];
+    // generate the mastermind codeword
+    // char [4] codeword;
+    char codeword[4] = {0,0,0,0};
+    char options[6] = {'1','2','3','4','5','6'};
 
-            for (int i = 0; i < 4; i++) {
-                if (codeword[i] == 0) {
-                    codeword[i] = newLetter;
-                    break;
-                }
-                if (codeword[i] == newLetter) {
-                    break;
+    //Loop through and generate random codeword
+    while (codeword[0] == 0 || codeword[1] == 0 || codeword[2] == 0 || codeword[3] == 0) {
+        char newLetter = options[random(0, 5)];
+
+        for (int i = 0; i < 4; i++) {
+            if (codeword[i] == 0) {
+                codeword[i] = newLetter;
+                break;
+            }
+            if (codeword[i] == newLetter) {
+                break;
+            }
+        }
+    }
+
+
+    // prompt the user for their first guess
+    while (1) {
+        put_string("Take a Guess\r\n>> ");
+        char guess[4] = {0,0,0,0};
+        get_string(guess, 4);
+
+        int correctCount = 0;  //Number of correct choices
+        int wrongLocationCount = 0;   //Number of correct choices that are in the wrong location
+
+        for (int i = 0; i < 4; i++) {
+            //Check if the pin is in the right location
+            if (guess[i] == codeword[i]) {
+                correctCount += 1;
+            }
+
+            //Check if the correct pins are on but in the wrong location
+            for (int c = 0; c < 4; c++) {
+                if (i != c && guess[i] == codeword[c]) {
+                    wrongLocationCount += 1;
                 }
             }
         }
 
+        //Show how close the user is via LED
+        LEDFlash(correctCount, wrongLocationCount);
 
 
 
-        // void mastermind(codeword);
-        // prompt the user for their first guess
-        // while{print_string("Take a Guess\r\n>> ")
-        // char [5] guess
-        // get_string(guess, 5);
-        // compare the user's guess against the mastermind's codeword
-        // if guess[i] == codeword[i]...; else if guess[i] == codeword[0..3]...;
-        // illuminate or blink the required LED's
-        // if correct solid(); else if incorrect, but is somewhere else blink(); else nothing;
-        // prompt the user for their next guess
-        // print_string("\r\n")}
-        // repeat 10 times or until the user guesses the correct codeword
     }
-    
+    // char [5] guess
+    // get_string(guess, 5);
+    // compare the user's guess against the mastermind's codeword
+    // if guess[i] == codeword[i]...; else if guess[i] == codeword[0..3]...;
+    // illuminate or blink the required LED's
+    // if correct solid(); else if incorrect, but is somewhere else blink(); else nothing;
+    // prompt the user for their next guess
+    // print_string("\r\n")}
+    // repeat 10 times or until the user guesses the correct codeword
+
+
     return 0;
 }
