@@ -107,10 +107,14 @@ int main()
     while (1) {
         roundCount += 1;
         put_string("Round ");
-        put_char(roundCount + '0');
+		if (roundCount < 10) {
+			put_char(roundCount + '0');
+		} else {
+			put_string("10");
+		}
         put_string(": Take a Guess\r\n>> ");
-        char guess[4] = {0,0,0,0};
-        get_string(guess, 4);
+        char guess[5] = {0,0,0,0};
+        get_string(guess, 5);
 
         int correctCount = 0;  //Number of correct choices
         int wrongLocationCount = 0;   //Number of correct choices that are in the wrong location
@@ -132,6 +136,7 @@ int main()
         //Show how close the user is via LED
         LEDFlash(correctCount, wrongLocationCount);
 
+		put_string("\r\n");
         put_char(correctCount + '0');
         put_string(" were in the correct location. ");
         put_char(wrongLocationCount + '0');
@@ -143,7 +148,9 @@ int main()
         }
         if (roundCount == 10) {
             put_string("Game over.  Correct answer was: ");
-            put_string(codeword);
+            for (int i = 0; i < 4; i++) {
+				put_char(codeword[i]);
+			}
             break;
         }
 
