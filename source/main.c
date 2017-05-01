@@ -102,10 +102,13 @@ int main()
         }
     }
 
-
+    int roundCount = 0;
     // prompt the user for their first guess
     while (1) {
-        put_string("Take a Guess\r\n>> ");
+        roundCount += 1;
+        put_string("Round ");
+        put_char(roundCount + '0');
+        put_string(": Take a Guess\r\n>> ");
         char guess[4] = {0,0,0,0};
         get_string(guess, 4);
 
@@ -129,18 +132,23 @@ int main()
         //Show how close the user is via LED
         LEDFlash(correctCount, wrongLocationCount);
 
+        put_char(correctCount + '0');
+        put_string(" were in the correct location. ");
+        put_char(wrongLocationCount + '0');
+        put_string(" were the correct choice but the wrong location.\r\n");
+
+        if (correctCount == 4) {
+            put_string("You win!\r\n");
+            break;
+        }
+        if (roundCount == 10) {
+            put_string("Game over.  Correct answer was: ");
+            put_string(codeword);
+            break;
+        }
 
 
     }
-    // char [5] guess
-    // get_string(guess, 5);
-    // compare the user's guess against the mastermind's codeword
-    // if guess[i] == codeword[i]...; else if guess[i] == codeword[0..3]...;
-    // illuminate or blink the required LED's
-    // if correct solid(); else if incorrect, but is somewhere else blink(); else nothing;
-    // prompt the user for their next guess
-    // print_string("\r\n")}
-    // repeat 10 times or until the user guesses the correct codeword
 
 
     return 0;
