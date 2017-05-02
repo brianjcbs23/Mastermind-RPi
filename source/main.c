@@ -5,7 +5,7 @@
 void blink_once()
 {
     // Turn on GPIO 24
-    gpio[GPSET0] |= 1 << 24;
+    gpio[GPSET0] |= 1 << 17;
 	timer_delay_ms(500);
     gpio[GPSET0] |= 1 << 23;
 	timer_delay_ms(500);
@@ -16,7 +16,7 @@ void blink_once()
     timer_delay_ms(500);
 
     // Turn off GPIO 24
-    gpio[GPCLR0] |= 1 << 24;
+    gpio[GPCLR0] |= 1 << 17;
     gpio[GPCLR0] |= 1 << 23;
     gpio[GPCLR0] |= 1 << 19;
     gpio[GPCLR0] |= 1 << 16;
@@ -38,7 +38,8 @@ void blink_code(uint32_t err)
 
 void LEDFlash(int correct, int wrongLocation) {
 	
-	int GPIO_offset[4] = {0, -1, -5, -8};
+	int GPIO_offset[4] = {-7, -1, -5, -8};
+	
 	
 	for (int i = 0; i < correct; i++) {
 		gpio[GPSET0] |= 1 << (24 + GPIO_offset[i]);
@@ -107,11 +108,12 @@ uint32_t random(uint32_t min, uint32_t max) {
 int main()
 {
     init_uart();
-    gpio[GPFSEL2] |= 0x1000;
+    gpio[GPFSEL1] |= 0x1000 << 9;
     gpio[GPFSEL2] |= 0x200;
 	gpio[GPFSEL1] |= 0x1000 << 6;
 	gpio[GPFSEL1] |= 0x1000 << 15;
 	blink_once();
+	
 
     // generate the mastermind codeword
     // char [4] codeword;
