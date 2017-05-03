@@ -107,6 +107,9 @@ uint32_t random(uint32_t min, uint32_t max) {
 
 int main()
 {
+	state = sys_timer[SYS_TIMER_CLO];
+	
+	
     init_uart();
     gpio[GPFSEL1] |= 0x1000 << 9;
     gpio[GPFSEL2] |= 0x200;
