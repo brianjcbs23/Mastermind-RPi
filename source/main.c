@@ -2,6 +2,7 @@
 #include "system_timer.h"
 #include "uart.h"
 
+//Blink all the LEDs to make sure they are ready.
 void blink_once()
 {
     // Turn on GPIO 24
@@ -24,6 +25,7 @@ void blink_once()
     timer_delay_ms(500);
 }
 
+//Used for debugging
 void blink_code(uint32_t err)
 {
     for(int i = 0; i < err; ++i)
@@ -36,15 +38,17 @@ void blink_code(uint32_t err)
     timer_delay_ms(4500);
 }
 
+//Flash the amount of LEDs corresponding to the user's answers
 void LEDFlash(int correct, int wrongLocation) {
-	
+	//The offset from GPIO 24 where everything was tested
 	int GPIO_offset[4] = {-7, -1, -5, -8};
 	
-	
+	//Turn on all the correct ones
 	for (int i = 0; i < correct; i++) {
 		gpio[GPSET0] |= 1 << (24 + GPIO_offset[i]);
 	}
 	
+	//Blink all the correct but wrong location
 	for (int counter = 0; counter < 10; counter++) {
 		for (int i = correct; i < wrongLocation + correct; i++) {
 			if ((counter & 1) > 0) {
@@ -55,7 +59,7 @@ void LEDFlash(int correct, int wrongLocation) {
 		}
 		timer_delay_ms(200);
 	}
-	
+	//Shut everything off
 	for (int i = 0; i < 4; i++) {
 		gpio[GPCLR0] |= 1 << (24 + GPIO_offset[i]);
 	}
@@ -107,9 +111,10 @@ uint32_t random(uint32_t min, uint32_t max) {
 
 int main()
 {
+	//Seed the randomizer
 	state = sys_timer[SYS_TIMER_CLO];
 	
-	
+	//Initialize the UART
     init_uart();
     gpio[GPFSEL1] |= 0x1000 << 9;
     gpio[GPFSEL2] |= 0x200;
